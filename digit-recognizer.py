@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 from numpy import genfromtxt, savetxt
 
 def main():
@@ -14,9 +15,14 @@ def main():
     #multi-core CPUs can use: rf = RandomForestClassifier(n_estimators=100, n_jobs=2)
     rf = RandomForestClassifier(n_estimators=100)
     rf.fit(train, target)
-    predicted_probs = [x[1] for x in rf.predict_proba(test)]
+    predicted = [int(x) for x in rf.predict(test)]
 
-    savetxt('Data/submission.csv', predicted_probs, delimiter=',', fmt='%f')
+    savetxt('Data/rf_submission.csv', predicted, delimiter=',', fmt='%d')
+
+    gb = GradientBoostingClassifier();
+    gb.fit(train, target);
+    predicted = [int(x) for x in gb.predict(test)]
+    savetxt('Data/gb_submission.csv', predicted, delimiter=',', fmt='%d')
 
 if __name__=="__main__":
     main()
